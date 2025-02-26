@@ -2,10 +2,14 @@ import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { AppDataSource } from './config/database';
+import { initializeDatabase } from './config/database';
 import { authenticateToken, authorize } from './middleware/auth.middleware';
 import { UserRole } from './models/enums/UserRole';
 import { generateAccessToken, generateRefreshToken } from './utils/jwt.utils';
+import authRoutes from './routes/auth.routes';
+import venueRoutes from './routes/venue.routes';
+import zoneAssignmentRoutes from './routes/zone-assignment.routes';
+import detectionRoutes from './routes/detection.routes';
 
 // Load environment variables
 dotenv.config();
@@ -15,6 +19,12 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/venues', venueRoutes);
+app.use('/api/zone-assignments', zoneAssignmentRoutes);
+app.use('/api/detections', detectionRoutes);
 
 // Test endpoints
 app.get('/api/test/public', (_req, res) => {
@@ -71,24 +81,21 @@ app.use((err: Error, _req: express.Request, res: express.Response, _next: expres
     console.error(err.stack);
     res.status(500).json({
         success: false,
-        message: 'Bir hata oluştu',
-        error: process.env.NODE_ENV === 'development' ? err.message : undefined
+        message: 'Bir hata oluştu'
     });
 });
 
-// Database connection and server start
+// Server başlatma
 const PORT = process.env.PORT || 3001;
 
 const startServer = async () => {
     try {
-        await AppDataSource.initialize();
-        console.log('Database connection successful!');
-
+        await initializeDatabase();
         app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
+            console.log(`Server ${PORT} portunda çalışıyor`);
         });
     } catch (error) {
-        console.error('Error starting server:', error);
+        console.error('Server başlatılırken hata oluştu:', error);
         process.exit(1);
     }
 };
