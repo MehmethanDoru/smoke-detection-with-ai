@@ -2,10 +2,12 @@ import 'reflect-metadata';
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { createServer } from 'http';
 import { initializeDatabase } from './config/database';
 import { authenticateToken, authorize } from './middleware/auth.middleware';
 import { UserRole } from './models/enums/UserRole';
 import { generateAccessToken, generateRefreshToken } from './utils/jwt.utils';
+import { WebSocketService } from './services/websocket.service';
 import authRoutes from './routes/auth.routes';
 import venueRoutes from './routes/venue.routes';
 import zoneAssignmentRoutes from './routes/zone-assignment.routes';
@@ -16,6 +18,10 @@ import cameraRoutes from './routes/camera.routes';
 dotenv.config();
 
 const app = express();
+const server = createServer(app);
+
+// WebSocket servisi başlat
+export const wsService = new WebSocketService(server);
 
 // Middleware
 app.use(cors());
@@ -93,8 +99,9 @@ const PORT = process.env.PORT || 3001;
 const startServer = async () => {
     try {
         await initializeDatabase();
-        app.listen(PORT, () => {
+        server.listen(PORT, () => {
             console.log(`Server ${PORT} portunda çalışıyor`);
+            console.log('WebSocket servisi aktif');
         });
     } catch (error) {
         console.error('Server başlatılırken hata oluştu:', error);

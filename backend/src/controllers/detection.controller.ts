@@ -4,6 +4,7 @@ import { DetectionEvent } from '../models/DetectionEvent';
 import { Venue } from '../models/Venue';
 import { AuthError } from '../errors/AuthError';
 import { CreateDetectionDto, UpdateDetectionDto, DetectionQueryParams } from '../dtos/detection.dto';
+import { wsService } from '../app';
 
 export class DetectionController {
     private detectionRepository = AppDataSource.getRepository(DetectionEvent);
@@ -165,7 +166,7 @@ export class DetectionController {
         }
     };
 
-    // Yeni tespit oluşturma (AI sisteminden gelecek)
+    // Yeni tespit oluşturma
     public createDetection = async (req: Request, res: Response): Promise<void> => {
         try {
             const detectionData: CreateDetectionDto = req.body;
@@ -183,43 +184,17 @@ export class DetectionController {
                 );
             }
 
-            // Bölge ve kamera kontrolü
-            const floor = venue.floors?.find(f => f.floorNumber === detectionData.floorNumber);
-            if (!floor) {
-                throw new AuthError(
-                    'Floor not found',
-                    404,
-                    'Kat bulunamadı'
-                );
-            }
-
-            const zone = floor.zones.find(z => z.id === detectionData.zoneId);
-            if (!zone) {
-                throw new AuthError(
-                    'Zone not found',
-                    404,
-                    'Bölge bulunamadı'
-                );
-            }
-
-            const camera = zone.cameras.find(c => c.id === detectionData.cameraId);
-            if (!camera) {
-                throw new AuthError(
-                    'Camera not found',
-                    404,
-                    'Kamera bulunamadı'
-                );
-            }
-
-            // Yeni tespit oluşturma
+            // Tespit oluştur
             const detection = this.detectionRepository.create({
                 ...detectionData,
-                detectedAt: new Date()
+                detectedAt: new Date(),
+                status: 'pending'
             });
 
             await this.detectionRepository.save(detection);
 
-            // TODO: Bildirim gönderme işlemi burada yapılacak
+            // WebSocket üzerinden bildirim gönder
+            wsService.sendDetectionNotification(detection);
 
             res.status(201).json({
                 ...detection,
