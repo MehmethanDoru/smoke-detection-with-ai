@@ -4,6 +4,7 @@ import { Venue } from '../models/Venue';
 import { ZoneAssignment } from '../models/ZoneAssignment';
 import { DetectionEvent } from '../models/DetectionEvent';
 import { Camera } from '../models/Camera';
+import { Statistic } from '../models/Statistic';
 import dotenv from 'dotenv';
 
 // load environment variables
@@ -18,7 +19,7 @@ export const AppDataSource = new DataSource({
     database: process.env.DB_NAME,
     synchronize: true,
     logging: process.env.NODE_ENV === 'development',
-    entities: [User, Venue, ZoneAssignment, DetectionEvent, Camera],
+    entities: [User, Venue, ZoneAssignment, DetectionEvent, Camera, Statistic],
     subscribers: [],
     migrations: []
 });
