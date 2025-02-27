@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { User } from './User';
+import { Camera } from './Camera';
 
 @Entity('venues')
 export class Venue {
@@ -86,6 +87,9 @@ export class Venue {
 
     @OneToMany(() => User, user => user.venue)
     users: User[];
+
+    @OneToMany(() => Camera, camera => camera.venue)
+    cameras: Camera[];
 
     @CreateDateColumn()
     createdAt: Date;

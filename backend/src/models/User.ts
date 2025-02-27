@@ -66,14 +66,14 @@ export class User {
     @Column({ nullable: true })
     lastLoginAt: Date;
 
+    @Column({ type: 'text', nullable: true })
+    refreshToken: string | null;
+
     @CreateDateColumn()
     createdAt: Date;
 
     @UpdateDateColumn()
     updatedAt: Date;
-
-    @Column({ nullable: true })
-    refreshToken: string | null;
 
     // Helper method to check if user has specific role
     hasRole(role: UserRole): boolean {

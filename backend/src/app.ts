@@ -10,6 +10,7 @@ import authRoutes from './routes/auth.routes';
 import venueRoutes from './routes/venue.routes';
 import zoneAssignmentRoutes from './routes/zone-assignment.routes';
 import detectionRoutes from './routes/detection.routes';
+import cameraRoutes from './routes/camera.routes';
 
 // Load environment variables
 dotenv.config();
@@ -25,6 +26,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/venues', venueRoutes);
 app.use('/api/zone-assignments', zoneAssignmentRoutes);
 app.use('/api/detections', detectionRoutes);
+app.use('/api/cameras', cameraRoutes);
 
 // Test endpoints
 app.get('/api/test/public', (_req, res) => {
