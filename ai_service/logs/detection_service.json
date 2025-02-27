@@ -8,3 +8,5 @@
 {"asctime": "2025-02-27 13:50:22,022", "name": "detection_service", "levelname": "INFO", "message": "Servis ba\u015far\u0131yla ba\u015flat\u0131ld\u0131"}
 {"asctime": "2025-02-27 13:54:39,944", "name": "detection_service", "levelname": "INFO", "message": "Model y\u00fcklendi: models/best.pt"}
 {"asctime": "2025-02-27 13:54:45,881", "name": "detection_service", "levelname": "INFO", "message": "Servis ba\u015far\u0131yla ba\u015flat\u0131ld\u0131"}
+{"asctime": "2025-02-27 14:40:19,387", "name": "detection_service", "levelname": "INFO", "message": "Model y\u00fcklendi: models/best.pt"}
+{"asctime": "2025-02-27 14:40:25,819", "name": "detection_service", "levelname": "INFO", "message": "Servis ba\u015far\u0131yla ba\u015flat\u0131ld\u0131"}
